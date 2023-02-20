@@ -1,0 +1,78 @@
+---
+title: "BeginnR Fall 2021: Activity 1 (due 10/18/2021)"
+output: html_notebook
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1. Consider the following two variables. What are their types?
+
+```{r}
+x <- TRUE
+y <- "BeginnR"
+z <- "2021"
+```
+x - logical
+y - character
+z - character (because of the quotes)
+
+2. Define a new numeric variable called `w` which has value 2. What happens if you try to add `w` and `z`? Can you explain this behavior?
+
+```{r}
+w <- 2
+w + z
+```
+
+3. What happens if you try to multiply `x` by 2? By 5? Now try subtracting 3 from `x`.
+
+```{r}
+x*2
+x*5
+x-3
+```
+I guess x = 1 if TRUE
+
+4. Suppose we redefine 
+```{r}
+x <- FALSE
+```
+Repeat question 3.
+
+```{r}
+x*2
+x*5
+x-3
+```
+x = 0 when FALSE
+
+5. Can you explain what's going on in problems 3 and 4?
+
+TRUE = 1, FALSE = 0
+
+6. Install and load the `nycflights13` package. In this package there is a dataset called `flights`. Use the help menu to explain what is in that dataset.
+
+install.packages('nycflights13')
+
+```{r}
+library('nycflights13')
+?flights
+```
+
+7. Explain what the built-in function `exp()` does. 
+
+```{r}
+?exp()
+```
+
+exp computes the exponential function.
+
+8. What are the main differences between `install.packages()` and `library()`? How often do you need to call each one?
+
+`install.packages()` installs it for the first time. This package is forever with you until you uninstall it. library() loads it, you need to do this every time you want to load the package.
+    
+## Supplemental Reading
+Introduction to R: https://r4ds.had.co.nz/introduction.html#running-r-code
+
+

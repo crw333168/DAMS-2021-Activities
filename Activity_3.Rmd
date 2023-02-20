@@ -1,0 +1,145 @@
+---
+title: "BeginnR Fall 2021: Activity 3 (due 11/1/2021)"
+output: html_document
+---
+
+Instructions: Please submit the completed .Rmd file via the Google Form linked in Slack. Rename the file as LASTNAME_FIRSTNAME.Rmd, replacing LASTNAME and FIRSTNAME with your last name and first name, respectively.
+
+0. Recap
+
+You're going to want to run this chunk :)
+```{r}
+library(tidyverse)
+library(nycflights13)
+```
+
+
+1. What is the difference between the dplyr functions `mutate()` and `transmute()`?
+
+```{r}
+?transmute
+```
+mutate() adds new variables and preserves existing ones; transmute() adds new variables and drops existing ones.
+
+The next few questions will use the `nycflights13::flights` dataset
+
+2. Write code to select all flights that:
+(a) Had an arrival delay of two or more hours
+(b) Flew to the Bay Area (SFO, SJC, OAK, PAO, STS):
+(c) Arrived more than two hours late, but didn’t leave late:
+(d) Departed between midnight and 6am (inclusive):
+(e) Were delayed by at least an hour, but made up over 30 minutes in flight:
+(f) Were operated by United, American, or Delta. Hint: Check the help menu! 
+
+```{r}
+flights
+```
+a)
+
+```{r}
+flights%>%
+  filter(arr_delay>=2)
+```
+b)
+```{r}
+flights%>%
+  filter(dest == SFO|SJC|OAK|PAO|STS)
+```
+c)
+```{r}
+flights %>%
+  filter(arr_delay>=2 & dep_delay<=0)
+```
+d)
+```{r}
+flights %>%
+  filter(dep_time)
+```
+e)
+```{r}
+flights %>%
+  mutate(gain = sched_arr_time - arr_time)
+  filter(arr_delay>=1 & gain>=30)
+```
+f)
+```{r}
+flights %>%
+  filter(carrier)%>%
+  airlines(United|American|Delta)
+```
+
+
+3. Calculate the average speed each plane was traveling during its journey. Call this variable `speed` and make it in mph.
+
+```{r}
+flights%>%
+  mutate(
+    speed = distance/(arr_time - dep_time)
+  )
+```
+
+
+4. Create a histogram showing the distribution of the speed of flights departing JFK airport in April.
+
+```{r}
+flights%>%
+  filter(month == 4 & origin == "JFK")%>%
+  ggplot(mapping=aes(x = speed))
+  geom_histogram()
+```
+
+
+5. Currently `dep_time` and `sched_dep_time` are convenient to look at, but hard to compute with because they’re not really continuous numbers. Overwrite them so that they give the number of minutes since midnight. Hint: recall the integer division operator `%/%`. You can also use `floor()`.
+
+6. Modify the code below to compute the departure delay manually using the variables `dep_time` and `sched_dep_time`, and save the result in a new variable `dep_delay_2.` How does `dep_delay_2` compare with `dep_delay`? Is `dep_delay` consistent with `dep_time` and `sched_dep_time`? 
+
+
+```{r}
+new_flights <- 
+  flights %>%  
+  mutate(dep_delay_2 = sched_dep_time)
+```
+
+
+Use this code to look at the two columns side by side. 
+```{r}
+new_flights %>% 
+  select(dep_delay, dep_delay_2)
+```
+
+Use this code chunk to see if yours is identical or not.
+```{r}
+identical(new_flights$dep_delay, new_flights$dep_delay_2)
+```
+
+7. Replace the `NA`s below to define variable called `flight_distances` and `flight_carriers`. Each of these variables should be a vector containing the data from the appropriate column of the `flights` tibble.
+
+```{r}
+flight_distances <- NA
+flight_carriers <- NA
+```
+
+
+8. Explain, in words, the data in `flight_subset` as defined below.
+
+```{r}
+flight_subset <- flight_distances[!(flight_distances < 500) & (flight_carriers %in% c("UA", "AA", "DL"))]
+flight_subset
+```
+Hint: you might want to try examples with your own, probably smaller vectors, or use Google :)
+
+
+9. Write code that uses dplyr verbs and the pipe operator to obtain the same data as in `flight_subset`, starting from the `flights` tibble. Check your answer using `identical()`. We've gotten you started below.
+
+```{r}
+flight_subset_2 <- flights
+```
+
+
+__Congratulations on making it through 3 weeks! You're well on your way to becoming a data wrangling master!__
+
+# 3) Supplemental Reading
+
+https://r4ds.had.co.nz/transform.html
+
+https://dcl-2019-04.github.io/curriculum/manip-basics.html

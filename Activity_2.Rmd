@@ -1,0 +1,139 @@
+---
+title: "BeginnR Fall 2021: Activity 2 (due 10/25/2021)"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+Instructions: Please submit the completed .Rmd file via the Google Form linked in Slack. Rename the file as LASTNAME_FIRSTNAME.Rmd, replacing LASTNAME and FIRSTNAME with your last name and first name, respectively.
+
+0. Recap
+
+You're going to want to run this chunk :)
+```{r}
+library(tidyverse)
+```
+
+1. Consider the `diamonds` tibble (loaded in by default with ggplot2). Describe the data in this table in 1-2 sentences.
+
+```{r}
+?diamonds
+```
+A dataset containing the prices and other attributes of almost 54,000 diamonds.
+
+2. `summary(diamonds)` does what its name suggests, it provides a summary for each of the variables, depending upon their type. Use this command (in a chunk) to get an overview of the variables. Are there any `NA`s (NA: "not available" or missing value)? Are any variable values not possible? What conclusions can you draw?
+
+```{r}
+summary(diamonds)
+```
+There are no NA's. The average diamond has a mean of .7979 carats, but can range from .2 carats to 5.01 carats. The cuts tend towards ideal and the most common color is G. The mean depth is 61.75 but can range from 43.00 to 79.00; the mean table is 57.46, but can range from 43.00 to 95.00; the mean price is 3933, but can range from 326 to 19923. Most diamonds have SI1 clarity. I'm not sure what x, y, and z mean. 
+
+3. How many rows and columns are in this data frame? 
+
+```{r}
+dim(diamonds)
+```
+53940 rows, 10 columns
+
+4. Define a variable called `diamond_price` that extracts the prices of the diamonds in this tibble. What data structure is this? What is the average price of a diamond in this dataset? Hint: consider `mean()`.
+
+```{r}
+diamond_price <- diamonds$price
+mean(diamond_price)
+```
+
+
+5. Explain what each of the following lines of code do. Hint: try defining your own smaller vectors to understand the behavior...or use Google :) 
+`diamonds[2,]`
+`diamond_price[3:5]`
+`diamond_price[-1]`
+
+```{r}
+diamonds[2,]
+```
+```{r}
+diamond_price[3:5]
+```
+```{r}
+diamond_price[-1]
+```
+
+diamonds[2,] gets the second row of the diamonds dataset. 
+diamond_price[3:5] gives the price of the third through fifth diamonds
+diamond_price[-1] gives the price of all diamonds but the first
+
+6. What is the color of the 942nd diamond in this data frame?
+
+```{r}
+diamonds$color[942]
+```
+
+7. Create a scatterplot of price vs. carat. What do you notice?
+
+```{r}
+diamonds %>%
+  ggplot(mapping=aes(x=price, y=carat))+
+  geom_point()
+```
+The scatterplot tends towards lower carats but as the price increases, the carats tend to have more outliers.
+
+8. Make a scatterplot of `hwy` vs `cyl`. Provide a 1-2 sentence analysis of your plot
+
+```{r}
+mpg%>%
+  ggplot(mapping=aes(x=hwy, y=cyl))+
+  geom_point()
+```
+The higher the hwy is, the lower the cyl is. The numbers tend to be whole as well.
+
+9. What happens if you make a scatterplot of `class` vs `drv`? Why is the plot not useful?
+
+```{r}
+mpg%>%
+  ggplot(mapping=aes(x=class, y=drv))+
+  geom_point()
+```
+The class of car has no impact on the type of drive it is.
+
+For the next 2 questions, you may want to refer to the ggplot2 cheat sheet at https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf
+
+10. Use an appropriate GEOM from the cheatsheet to make a plot the distribution of the __cut__ of diamonds in this dataset. What is the most common cut? What is the least common? 
+
+```{r}
+diamonds %>%
+  ggplot(mapping=aes(x=cut))+
+  geom_bar()
+
+```
+
+
+11. Use an appropriate GEOM from the cheatsheet to make a plot the distribution of the __carat__ of diamonds in this dataset. Do you find anything interesting? 
+
+```{r}
+diamonds %>%
+  ggplot(mapping=aes(x=carat))+
+  geom_density()
+
+```
+
+
+12. Set your working directory to the same directory as where this .Rmd file lives. Use `write_csv()` to write out the `diamonds` data frame into a .csv file called `diamonds.csv` into that directory. Then read it back in using `read_csv()`.
+
+```{r}
+setwd()
+write_csv()
+read_csv()
+```
+
+
+Congratulations on making it through 2 weeks! You're already on your way to being a data visualization pro!
+
+### Supplemental Reading
+
+https://r4ds.had.co.nz/data-visualisation.html#first-steps
+
+https://dcl-data-vis.stanford.edu/ggplot2-basics.html

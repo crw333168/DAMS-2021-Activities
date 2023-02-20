@@ -1,0 +1,98 @@
+---
+title: "BeginnR Fall 2021: Activity 4 (due 11/8/2021)"
+output: html_document
+---
+
+Instructions: Please submit the completed .Rmd file via the Google Form linked in Slack. Rename the file as LASTNAME_FIRSTNAME.Rmd, replacing LASTNAME and FIRSTNAME with your last name and first name, respectively.
+
+0. Recap
+
+You're going to want to run this chunk :)
+```{r}
+library(tidyverse)
+library(nycflights13)
+```
+
+1. In the `diamonds` tibble, explain whether each of the following variables is categorical or quantitative. Give a short justification for each.
+- `carat`: quantified through medians and means, quantitative
+- `cut`: categorized from Fair to Ideal, categorical
+- `color`: categorized from D to J, categoircal 
+- `clarity`: categorized from SI1 to VVS1, categorical
+- `table`: quantified through medians and means, quantitative
+- `price`: quantified through medians and means, quantitative
+
+```{r}
+summary(diamonds)
+```
+
+2. Make an appropriate plot showing the **proportion** of diamonds of each color. Hint: there are many ways to do this. You can use the Internet if you get stuck, but it should be doable with methods covered in BeginnR so far.
+
+```{r}
+diamonds %>%
+  ggplot(mapping = aes(x=color))+
+  geom_bar()
+```
+
+
+3. Make an appropriate plot showing the distribution of price, broken down by the `cut`. Your partner doesn't care about diamonds of Fair or Good cut, so only show the distribution for Very Good, Premium, and Ideal cuts.
+
+```{r}
+diamonds %>%
+  ggplot(mapping = aes(x=cut, y=price))+
+  geom_boxplot()
+```
+
+
+4. In Demo 4, it is mentioned that `geom_hex()` is likely better than `geom_point()` when there are a lot of points. Why is this the case?
+
+The density of the points would obscure the countability of the points, making it difficult to see how many points there actually are.
+
+5. When would you want to use `geom_jitter()` instead of `geom_point()`? If you were to plot `x` versus `y` in the `diamonds` tibble, would you use `geom_jitter()`, `geom_point()`, or `geom_hex()`?
+
+geom_jitter is a useful way of handling overplotting caused by discreteness in smaller datasets.
+
+```{r}
+diamonds%>%
+  ggplot(mapping=aes(x,y))+
+  geom_hex()
+```
+I would use geom_hex because it is difficult to see through the density of the points with the other methods of graphing.
+
+6. You're looking to spend between $3200 and $3300 (inclusive) on a diamond. Make a scatterplot of the `y` vs. the `x` of these diamonds. Make the points on the plot filled diamonds, with the fill color based on the color of each diamond, and make the size (area) of the diamond-shaped points proportional to each diamond's `carat` value. Hint: https://ggplot2.tidyverse.org/articles/ggplot2-specs.html and/or other online resources may be helpful.
+
+```{r}
+diamonds%>%
+  filter(price >= 3200 & price <=3300)
+  ggplot(mapping=aes(x=x, y=y))+
+  geom_point(fill = color, size = carat)
+```
+
+
+7. Add a line of best fit to the plot in question 6 using `geom_smooth()`. Color it red, and do NOT display the grey standard error region.
+
+```{r}
+diamonds%>%
+  filter(price >= 3200 & price <=3300)
+  ggplot(mapping=aes(x=x, y=y))+
+  geom_point()+
+  geom_smooth()
+  
+```
+
+
+8. Pick any of the plots in the previous questions, and create an appropriate title and axis labels. Make the title centered.
+
+```{r}
+diamonds %>%
+  ggplot(mapping = aes(x=color))+
+  geom_bar()+
+  labs(
+    title = "Proportion of Diamonds of Each Color",
+    X = "Color",
+    Y = "Proportion of Diamonds",+
+  theme(plot.title = element_text(hjust = 0.5))
+  )
+```
+
+
+
